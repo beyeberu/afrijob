@@ -1,0 +1,61 @@
+.how-it-works {
+    background: white;
+    padding: 4rem 0;
+  }
+  
+  .how-it-works-container {
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.5rem;
+  }
+  
+  .how-it-works-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .how-it-works-steps {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .how-it-works-steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .how-it-works-step {
+    background: #f9fafb;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+  }
+  
+  .how-it-works-step:hover {
+    background: #e0e7ff;
+    transform: translateY(-0.25rem);
+  }
+  
+  .how-it-works-step-icon {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .how-it-works-step-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+  }
+  
+  .how-it-works-step-description {
+    color: #4b5563;
+  }

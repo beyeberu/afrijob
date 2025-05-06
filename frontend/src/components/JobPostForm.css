@@ -1,0 +1,266 @@
+/* JobPostForm.css */
+
+.job-post-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.job-post-form input,
+.job-post-form select,
+.job-post-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.job-post-form input:focus,
+.job-post-form select:focus,
+.job-post-form textarea:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.job-post-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.job-post-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 1em;
+}
+
+.job-post-form input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #ddd;
+  background-color: #f9f9f9;
+}
+
+.job-post-form input[type="file"]:focus {
+  border-color: #4a90e2;
+  background-color: #f0f7ff;
+}
+
+.job-post-form button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.job-post-form button:hover {
+  background-color: #3a7bc8;
+}
+
+.job-post-form button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-field {
+  border-color: #e74c3c !important;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: -12px;
+  margin-bottom: 1rem;
+}
+
+.success {
+  color: #2ecc71;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.error {
+  color: #e74c3c;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+/* Responsive grid layout */
+@media (min-width: 768px) {
+  .job-post-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .job-post-form textarea,
+  .job-post-form button,
+  .success,
+  .error {
+    grid-column: span 2;
+  }
+  
+  .job-post-form input[type="date"] {
+    grid-column: span 1;
+  }
+}
+
+/* Animation for form elements */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.job-post-form > * {
+  animation: fadeIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+/* Create staggered animation */
+.job-post-form > *:nth-child(1) { animation-delay: 0.1s; }
+.job-post-form > *:nth-child(2) { animation-delay: 0.2s; }
+.job-post-form > *:nth-child(3) { animation-delay: 0.3s; }
+.job-post-form > *:nth-child(4) { animation-delay: 0.4s; }
+.job-post-form > *:nth-child(5) { animation-delay: 0.5s; }
+/* Continue this pattern or use a loop in your actual CSS-in-JS if needed */
+
+/* Custom styling for date inputs */
+.job-post-form input[type="date"] {
+  position: relative;
+}
+
+.job-post-form input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+
+.job-post-form input[type="date"]::before {
+  content: attr(placeholder);
+  position: absolute;
+  color: #999;
+}
+
+.job-post-form input[type="date"]:focus::before,
+.job-post-form input[type="date"]:valid::before {
+  display: none;
+}
+
+/* Review Section Styling */
+.job-post-review {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #f9f9ff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(60,60,60,0.07);
+  padding: 2rem 2.5rem;
+  color: #222;
+}
+
+.job-post-review h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.job-post-review ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.job-post-review li {
+  margin-bottom: 0.7rem;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.4rem;
+}
+
+.job-post-review button {
+  margin-right: 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #1976d2;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.job-post-review button[disabled] {
+  background: #b0b0b0;
+  cursor: not-allowed;
+}
+
+.job-post-review button:last-child {
+  background: #43a047;
+}
+
+.job-post-review .error {
+  color: #d32f2f;
+  background: #fff0f0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Success message styling */
+.success {
+  color: #388e3c;
+  background: #f1f8e9;
+  padding: 0.7rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* User History Box */
+.user-history-box {
+  max-width: 350px;
+  margin: 2rem auto 0 auto;
+  background: #e3f0fd;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  color: #1976d2;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+}
+
+.job-history-card {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(60,60,60,0.07);
+  margin: 0.7rem 0;
+  padding: 0.7rem 1rem;
+  text-align: left;
+}

@@ -1,0 +1,128 @@
+.jobs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+  }
+  
+  .loading, .error, .no-jobs {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .job-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  
+  .job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .job-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+  }
+  
+  .company-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+  
+  .job-header h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .company {
+    margin: 5px 0;
+    color: #666;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  
+  .status.active {
+    background: #e6f7e6;
+    color: #2e7d32;
+  }
+  
+  .status.expired {
+    background: #ffebee;
+    color: #c62828;
+  }
+  
+  .status.upcoming {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .job-details {
+    margin: 15px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .job-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  .job-description {
+    margin: 20px 0;
+  }
+  
+  .job-description h4 {
+    margin: 10px 0 5px 0;
+    font-size: 1rem;
+  }
+  
+  .job-description p {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .job-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .apply-button {
+    padding: 8px 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .apply-button:hover {
+    background: #3e8e41;
+  }
+  
+  .contact {
+    font-size: 0.8rem;
+    color: #666;
+  }

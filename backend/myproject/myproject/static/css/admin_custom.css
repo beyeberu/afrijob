@@ -1,0 +1,174 @@
+/* Admin Theme Colors */
+:root {
+    --primary: #0F52BA;
+    --secondary: #34A853;
+    --accent: #FF6B35;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --error: #EF4444;
+  }
+  
+  /* Header Styling */
+  #header {
+    background: var(--primary);
+    color: white;
+  }
+  
+  #header a:link, #header a:visited {
+    color: white;
+  }
+  
+  /* Branding */
+  #branding h1 {
+    font-weight: bold;
+  }
+  
+  /* Module Headers */
+  .module h2, .module caption {
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  /* List Page Styling */
+  #changelist-filter h2 {
+    background: var(--primary);
+    padding: 8px;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .filtered .changelist-filter {
+    border-right: none;
+    background: #f8fafc;
+    border-radius: 4px;
+  }
+  
+  /* Action Buttons */
+  .button, input[type=submit], input[type=button], .submit-row input {
+    background: var(--primary);
+    color: white;
+    border-radius: 4px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover {
+    background: var(--primary);
+    opacity: 0.9;
+  }
+  
+  .button.default, input[type=submit].default {
+    background: var(--success);
+  }
+  
+  /* Form Styling */
+  .form-row {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .form-row img {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  /* Status Colors */
+  .status-active {
+    color: var(--success) !important;
+  }
+  
+  .status-expired {
+    color: var(--error) !important;
+  }
+  
+  .status-upcoming {
+    color: var(--warning) !important;
+  }
+  
+  .status-draft {
+    color: #64748b !important;
+  }
+  
+  /* Table Styling */
+  #changelist table {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  #changelist table thead th {
+    background: #f8fafc;
+    padding: 12px 8px;
+  }
+  
+  #changelist table tbody tr:hover {
+    background: #f1f5f9;
+  }
+  
+  /* Pagination */
+  .paginator {
+    margin: 16px 0;
+    padding: 8px;
+    background: #f8fafc;
+    border-radius: 4px;
+  }
+  
+  .paginator a {
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--primary);
+  }
+  
+  .paginator a:hover {
+    background: var(--primary);
+    color: white;
+  }
+  
+  /* Messages */
+  .success {
+    background: var(--success);
+  }
+  
+  .warning {
+    background: var(--warning);
+  }
+  
+  .error {
+    background: var(--error);
+  }
+  
+  /* Dashboard */
+  .dashboard .module table th {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .dashboard .module table td {
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+  
+  /* Recent Actions */
+  .actionlist {
+    padding: 0;
+  }
+  
+  .actionlist li {
+    padding: 8px 16px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .actionlist li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Logo Preview */
+  .field-display_logo img {
+    border-radius: 8px;
+    padding: 4px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }

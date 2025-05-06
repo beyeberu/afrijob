@@ -1,0 +1,232 @@
+/* FAQ Container */
+.faq-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    padding: 3rem 1rem;
+  }
+  
+  .faq-content {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+  
+  /* Header Styles */
+  .faq-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .header-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .header-icon {
+    height: 2rem;
+    width: 2rem;
+    color: #3b82f6;
+    margin-right: 0.75rem;
+  }
+  
+  .faq-header h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+  }
+  
+  .header-subtext {
+    font-size: 1.125rem;
+    color: #4b5563;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  
+  /* Accordion Styles */
+  .faq-accordion {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .faq-item {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+  }
+  
+  .faq-item:hover {
+    background-color: rgba(249, 250, 251, 0.5);
+  }
+  
+  .faq-item.active {
+    background-color: #f8fafc;
+  }
+  
+  .faq-question {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .faq-question:hover {
+    background-color: rgba(243, 244, 246, 0.5);
+  }
+  
+  .question-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .question-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  
+  .question-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: left;
+  }
+  
+  .chevron-icon {
+    height: 1.25rem;
+    width: 1.25rem;
+    color: #9ca3af;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  
+  .faq-item.active .chevron-icon {
+    color: #3b82f6;
+    transform: rotate(180deg);
+  }
+  
+  .faq-answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    margin-left: 2.5rem;
+  }
+  
+  .faq-item.active .faq-answer {
+    max-height: 500px;
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+  }
+  
+  .faq-answer p {
+    color: #4b5563;
+    line-height: 1.625;
+    font-size: 1rem;
+  }
+  
+  /* Contact Section */
+  .faq-contact {
+    margin-top: 3rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+  }
+  
+  .faq-contact h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+  }
+  
+  .faq-contact p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+  
+  .contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .email-button, .telegram-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .email-button {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+  }
+  
+  .email-button:hover {
+    background-color: #dbeafe;
+  }
+  
+  .telegram-button {
+    background-color: #ecfdf5;
+    color: #047857;
+  }
+  
+  .telegram-button:hover {
+    background-color: #d1fae5;
+  }
+  
+  .button-icon, .telegram-icon {
+    height: 1.25rem;
+    width: 1.25rem;
+    margin-right: 0.5rem;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 640px) {
+    .faq-header h1 {
+      font-size: 1.875rem;
+    }
+    
+    .faq-question {
+      padding: 1rem 1.25rem;
+    }
+    
+    .question-text {
+      font-size: 1rem;
+    }
+    
+    .faq-answer {
+      margin-left: 2rem;
+    }
+    
+    .contact-buttons {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
