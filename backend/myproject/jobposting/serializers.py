@@ -9,7 +9,7 @@ class JobPostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'company_logo': {'required': False, 'allow_null': True},
-            'location': {'required': False, 'allow_blank': True},
+            'location': {'required': False, 'allow_null': True},  # No allow_blank!
             'employment_type': {'required': False, 'allow_blank': True},
             'job_category': {'required': False, 'allow_blank': True},
             'no_of_employees': {'required': False, 'allow_blank': True},

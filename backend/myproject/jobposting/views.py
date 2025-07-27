@@ -66,3 +66,6 @@ class JobPostCreateView(generics.CreateAPIView):
                 'detail': str(e),
                 'errors': {}
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def perform_create(self, serializer):
+        serializer.save(is_new_for_admin=True)

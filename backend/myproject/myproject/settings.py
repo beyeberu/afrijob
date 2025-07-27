@@ -4,19 +4,12 @@ import firebase_admin
 from firebase_admin import credentials
 from django.core.exceptions import ImproperlyConfigured
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-development-key-change-in-production')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-# Application definition
 INSTALLED_APPS = [
     'jobs.apps.JobsConfig',
     'django.contrib.admin',
@@ -27,7 +20,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'jobposting',
-    # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
     'import_export',
@@ -51,7 +43,9 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'jobposting' / 'templates',  # This line is needed
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,7 +61,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'myproject.wsgi.application'
 ASGI_APPLICATION = 'myproject.asgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -75,10 +68,8 @@ DATABASES = {
     }
 }
 
-# Custom User Model
 AUTH_USER_MODEL = 'jobs.FirebaseUser'
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -94,44 +85,38 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Authentication backends
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # For admin access
-    'jobs.authentication.FirebaseAuthentication',  # For Firebase auth
+    'django.contrib.auth.backends.ModelBackend',
+    'jobs.authentication.FirebaseAuthentication',
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Firebase Configuration
+# ✅ Correct Firebase Initialization
+FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, 'myproject', 'afrijob-a8080-firebase-adminsdk-fbsvc-a0369da3f7.json')
 try:
-    firebase_credentials_path = os.path.join(BASE_DIR, 'firebase-adminsdk.json')
-    if os.path.exists(firebase_credentials_path):
-        cred = credentials.Certificate(firebase_credentials_path)
-        FIREBASE_APP = firebase_admin.initialize_app(cred)
+    if os.path.exists(FIREBASE_CREDENTIALS):
+        cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+        firebase_admin.initialize_app(cred)
     else:
-        raise FileNotFoundError("Firebase credentials file not found")
+        raise FileNotFoundError(f"Firebase credentials not found at: {FIREBASE_CREDENTIALS}")
 except Exception as e:
     if DEBUG:
         print(f"Firebase initialization error: {e}")
     else:
-        raise ImproperlyConfigured("Firebase configuration error")
+        raise ImproperlyConfigured(f"Firebase error: {str(e)}")
 
-# REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'jobs.authentication.FirebaseAuthentication',
@@ -150,7 +135,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
 }
 
-# CORS Settings
+# CORS
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
@@ -181,7 +166,7 @@ X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 
-# Email Configuration
+# Email
 EMAIL_BACKEND = os.environ.get(
     'EMAIL_BACKEND',
     'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend'
@@ -224,7 +209,6 @@ LOGGING = {
     },
 }
 
-# Cache
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -238,11 +222,9 @@ CHANNEL_LAYERS = {
     },
 }
 
-# Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_COOKIE_AGE = 1209600
 SESSION_SAVE_EVERY_REQUEST = True
 
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = False  # Required to access CSRF token via JS
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']  # Add your frontend URL
+CSRF_COOKIE_HTTPONLY = False

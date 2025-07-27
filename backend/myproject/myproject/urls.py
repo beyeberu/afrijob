@@ -14,7 +14,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Admin panel
     path('api/jobposting/', include('jobposting.urls')),  # <-- fixed here
     path('api/dashboard/stats/', dashboard_stats, name='dashboard-stats'),  # Dashboard stats endpoint
-    path('api/', include(router.urls)),  # Include router URLs from the jobs app
+    path('api/', include(router.urls)),
+    path('api/', include('jobs.urls')),  # <-- This line includes /api/advertisements/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

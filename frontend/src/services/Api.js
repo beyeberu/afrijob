@@ -188,8 +188,6 @@ export const clearApiCache = (keyPattern) => {
   }
 };
 
-
-
 export const postJob = async (jobData) => {
   const response = await fetch('/api/jobs/', {
     method: 'POST',
@@ -206,3 +204,48 @@ export const postJob = async (jobData) => {
   
   return await response.json();
 };
+
+export async function fetchCompanies() {
+  try {
+    const { data } = await api.get('/companies/');
+    // If your backend returns { results: [...] }, return data.results; else return data
+    return data.results || data;
+  } catch (error) {
+    throw new Error(error.message || 'Failed to fetch companies');
+  }
+}
+
+export async function fetchUsers() {
+  try {
+    const { data } = await api.get('/users/');
+    // If your backend returns { results: [...] }, return data.results; else return data
+    return data.results || data;
+  } catch (error) {
+    throw new Error(error.message || 'Failed to fetch users');
+  }
+}
+
+export async function fetchAdvertisements() {
+  const response = await fetch('/api/advertisements/');
+  if (!response.ok) throw new Error('Failed to fetch advertisements');
+  return response.json();
+}
+// filepath: [Api.js](http://_vscodecontentref_/8)
+export async function fetchLocations() {
+  try {
+    const { data } = await api.get('/locations/');
+    return data;
+  } catch (error) {
+    throw new Error(error.message || 'Failed to fetch locations');
+  }
+}
+
+export async function addLocation(name) {
+  try {
+    const { data } = await api.post('/locations/', { name });
+    return data;
+  } catch (error) {
+    let msg = error?.response?.data?.name?.[0] || error.message || 'Failed to add location';
+    throw new Error(msg);
+  }
+}

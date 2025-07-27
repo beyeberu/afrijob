@@ -37,9 +37,12 @@ const JobDetailPopup = ({ job, onClose }) => {
         </div>
 
         <div className="popup-details">
-          <p className="popup-detail">
-            <FaMapMarkerAlt /> {job.location}
-          </p>
+<p><strong>Location:</strong> {job.location || job.location_name || 'Location not specified'}</p>
+          {job.employment_type && (
+            <p className="popup-detail">
+              <FaClock /> {job.employment_type?.name}
+            </p>
+          )}
           {job.min_salary && job.max_salary && (
             <p className="popup-detail">
               <FaMoneyBillWave /> 

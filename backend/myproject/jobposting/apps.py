@@ -4,4 +4,4 @@ class JobpostingConfig(AppConfig):
     name = 'jobposting'
 
     def ready(self):
-        import jobposting.signals
+        import jobposting.signals  # <-- This line is required!

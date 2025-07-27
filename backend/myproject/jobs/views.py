@@ -7,10 +7,11 @@ from firebase_admin import auth
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.db.models import Count, Q
-from .models import Job, JobCategory, FirebaseUser
-from .serializers import JobSerializer, UserSerializer
+from .models import Job, JobCategory, FirebaseUser, Advertisement, Location
+from .serializers import JobSerializer, UserSerializer, AdvertisementSerializer, LocationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from .authentication import FirebaseAuthentication
+from rest_framework import generics
 
 User = get_user_model()
 
@@ -178,3 +179,15 @@ def dashboard_stats(request):
         })
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+class AdvertisementListView(generics.ListAPIView):
+    queryset = Advertisement.objects.filter(is_active=True).order_by('-created_at')
+    serializer_class = AdvertisementSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class LocationListCreateView(generics.ListCreateAPIView):
+    queryset = Location.objects.all().order_by('name')
+    serializer_class = LocationSerializer
+    permission_classes = [permissions.AllowAny]

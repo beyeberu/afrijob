@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import FirebaseUser, UserProfile, Job, EmploymentType, JobCategory
+from .models import FirebaseUser, UserProfile, Job, EmploymentType, JobCategory, Location, Advertisement
 
 
 # --------------------------
@@ -105,6 +105,16 @@ class JobCategoryResource(resources.ModelResource):
         model = JobCategory
         import_id_fields = ('id',)
         fields = ('id', 'name', 'description')
+
+
+# --------------------------
+# Location Resource
+# --------------------------
+class LocationResource(resources.ModelResource):
+    class Meta:
+        model = Location
+        import_id_fields = ('id',)
+        fields = ('id', 'name')
 
 
 # --------------------------
@@ -221,6 +231,16 @@ class JobAdmin(ImportExportModelAdmin):
 
 
 # --------------------------
+# Location Admin
+# --------------------------
+@admin.register(Location)
+class LocationAdmin(ImportExportModelAdmin):
+    resource_class = LocationResource
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
+# --------------------------
 # Register Other Models
 # --------------------------
 admin.site.register(FirebaseUser, FirebaseUserAdmin)
@@ -232,5 +252,7 @@ class JobCategoryAdmin(ImportExportModelAdmin):
     resource_class = JobCategoryResource
     list_display = ('name', 'description')
     search_fields = ('name', 'description')
+
+admin.site.register(Advertisement)
 
 

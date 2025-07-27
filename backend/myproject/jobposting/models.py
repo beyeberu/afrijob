@@ -77,7 +77,7 @@ class JobPost(models.Model):
     job_title = models.CharField(max_length=200)
     company_name = models.CharField(max_length=200)
     company_logo = models.ImageField(upload_to='job_postings/logos/', null=True, blank=True)
-    location = models.CharField(max_length=200, blank=True)
+    location = models.CharField(max_length=255)
     employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_TYPES, blank=True)
     job_category = models.CharField(max_length=50, choices=JOB_CATEGORIES, blank=True)
     no_of_employees = models.CharField(max_length=100, blank=True)
@@ -92,11 +92,11 @@ class JobPost(models.Model):
     how_to_apply = models.TextField(blank=True)
     encourage_applicants = models.TextField(blank=True)
 
-    # Salary Information
+    # Salary Info
     min_salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     max_salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    # Contact Information
+    # Contact Info
     phone_no = models.CharField(max_length=20, blank=True)
     email = models.EmailField()
     website = models.URLField(blank=True)
@@ -109,11 +109,14 @@ class JobPost(models.Model):
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    approved = models.BooleanField(default=False)
+    job_created = models.BooleanField(default=False)  # ✅ This is new
+    is_new_for_admin = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.job_title} at {self.company_name}"
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['approved', '-created_at']
         verbose_name = 'Job Post'
         verbose_name_plural = 'Job Posts'

@@ -10,7 +10,36 @@ function getPercentageChange(current, previous) {
   return `${sign}${change.toFixed(1)}%`;
 }
 
-const Dashboard = () => {
+const texts = {
+  en: {
+    dashboard: "Job Dashboard",
+    subtitle: "Comprehensive overview of your recruitment platform",
+    totalJobs: "Total Jobs",
+    activeJobs: "Active Jobs",
+    expiredJobs: "Expired Jobs",
+    lastUpdated: "Last updated",
+    loading: "Gathering insights...",
+    errorTitle: "Data Loading Error",
+    errorMessage: "Failed to fetch job data",
+    refresh: "Refresh Dashboard",
+    companiesList: "Companies List"
+  },
+  am: {
+    dashboard: "የስራ ዳሽቦርድ",
+    subtitle: "የእርስዎ የቅጥር መድረክ ዝርዝር እይታ",
+    totalJobs: "ጠቅላላ ስራዎች",
+    activeJobs: "አባል ስራዎች",
+    expiredJobs: "ያበቃ ስራዎች",
+    lastUpdated: "መጨረሻ የታደሰበት",
+    loading: "መረጃ በመሰብሰብ ላይ...",
+    errorTitle: "የመረጃ ጭነት ስህተት",
+    errorMessage: "የስራ መረጃ ማግኘት አልተቻለም",
+    refresh: "ዳሽቦርድ ዳግም አስተካክል",
+    companiesList: "የኩባንያዎች ዝርዝር"
+  }
+};
+
+const Dashboard = ({ lang = 'en' }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -100,8 +129,8 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>Job Dashboard</h1>
-        <p className="dashboard-subtitle">Comprehensive overview of your recruitment platform</p>
+        <h1>{texts[lang].dashboard}</h1>
+        <p className="dashboard-subtitle">{texts[lang].subtitle}</p>
         <div className="header-gradient"></div>
       </header>
 
@@ -110,7 +139,7 @@ const Dashboard = () => {
           <div className="loading-spinner">
             <div className="spinner-circle"></div>
           </div>
-          <p className="loading-text">Gathering insights...</p>
+          <p className="loading-text">{texts[lang].loading}</p>
         </div>
       ) : error ? (
         <div className="error-state">
@@ -119,20 +148,20 @@ const Dashboard = () => {
               <path fill="currentColor" d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
             </svg>
           </div>
-          <h3 className="error-title">Data Loading Error</h3>
+          <h3 className="error-title">{texts[lang].errorTitle}</h3>
           <p className="error-message">{error}</p>
           <button onClick={() => window.location.reload()} className="refresh-button">
             <svg width="16" height="16" viewBox="0 0 24 24">
               <path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
             </svg>
-            Refresh Dashboard
+            {texts[lang].refresh}
           </button>
         </div>
       ) : (
         <>
           <div className="stats-grid">
             <StatCard 
-              title="Total Jobs" 
+              title={texts[lang].totalJobs} 
               value={totalJobs} 
               icon="📊"
               trend="up"
@@ -140,7 +169,7 @@ const Dashboard = () => {
               color="#6366f1"
             />
             <StatCard 
-              title="Active Jobs" 
+              title={texts[lang].activeJobs} 
               value={activeJobs} 
               icon="✅"
               trend="up"
@@ -148,7 +177,7 @@ const Dashboard = () => {
               color="#10b981"
             />
             <StatCard 
-              title="Expired Jobs" 
+              title={texts[lang].expiredJobs} 
               value={expiredJobs} 
               icon="⏳"
               trend="up"
@@ -162,7 +191,7 @@ const Dashboard = () => {
               <svg width="16" height="16" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
               </svg>
-              Last updated: {new Date().toLocaleString()}
+              {texts[lang].lastUpdated}: {new Date().toLocaleString()}
             </div>
           </div>
         </>
@@ -197,7 +226,7 @@ const StatCard = ({ title, value, icon, color, trend, trendValue, description })
     {description && (
       <div className="stat-hover-info">
         <div className="hover-content">
-          <h4>Companies List</h4>
+          <h4>{texts[lang].companiesList}</h4>
           <p>{description}</p>
         </div>
       </div>

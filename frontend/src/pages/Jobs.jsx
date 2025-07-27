@@ -1,276 +1,268 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { fetchJobs, postJob } from '../services/Api';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { fetchJobs } from '../services/Api';
 import JobCard from '../components/JobCard';
-import JobDetailModal from '../components/JobDetailModal';
-import ContactModal from '../components/ContactModal';
 import LoadingSpinner from '../components/LoadingSpinner';
-import SearchBar from '../components/SearchBar';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import './Jobs.css';
+import { FaUserTie, FaBriefcase, FaArrowRight, FaExternalLinkAlt } from 'react-icons/fa';
+import './Home.css';
 
-const SLIDER_IMAGES = [
-  {
-    id: 1,
-    url: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    title: 'Find Your Dream Job',
-    subtitle: 'Thousands of opportunities waiting for you'
+const texts = {
+  en: {
+    heroTitle: "Find Your Dream Job Today",
+    heroSubtitle: "Connect with thousands of opportunities from top employers",
+    browseAll: "Browse All Jobs",
+    howItWorks: "How AfriJob Works",
+    howItWorksDesc: "Connecting talented professionals with great opportunities",
+    forSeekers: "For Job Seekers",
+    seekerSteps: [
+      {
+        title: "Browse Opportunities",
+        desc: "Search jobs by keyword or filter by category, location, or experience level"
+      },
+      {
+        title: "View Job Details",
+        desc: "Click on any job to see full description, requirements, and company information"
+      },
+      {
+        title: "Apply Directly",
+        desc: "Contact employers using the provided contact information to apply"
+      }
+    ],
+    forEmployers: "For Employers",
+    employerSteps: [
+      {
+        title: "Submit Job Posting",
+        desc: "Go to our contact page and click \"Job Posting Form\" to access our submission form"
+      },
+      {
+        title: "Complete the Form",
+        desc: "Fill in all required details about the position, requirements, and contact information"
+      },
+      {
+        title: "Approval & Posting",
+        desc: "Our team reviews your submission and posts it within 24 hours of approval"
+      }
+    ],
+    postJob: "Post a Job",
+    latestJobs: "Latest Job Opportunities",
+    latestJobsDesc: "Browse our most recent job postings",
+    loading: "Loading latest jobs...",
+    noJobs: "No jobs available at the moment. Please check back later.",
+    viewAll: "View All Jobs",
+    loginToView: "Login to View All Jobs"
   },
-  {
-    id: 2,
-    url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    title: 'Hire Top Talent',
-    subtitle: 'Connect with qualified professionals'
-  },
-  {
-    id: 3,
-    url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    title: 'Grow Your Career',
-    subtitle: 'Take the next step in your professional journey'
+  am: {
+    heroTitle: "የሚወዱትን ስራ ዛሬ ያግኙ",
+    heroSubtitle: "ከከፍተኛ የስራ አዳራሾች ጋር በሺዎች ዕድሎች ይገናኙ",
+    browseAll: "ሁሉንም ስራዎች ይመልከቱ",
+    howItWorks: "አፍሪጆብ እንዴት ነው የሚሰራው",
+    howItWorksDesc: "ብቁ ባለሙያዎችን ከታላቅ ዕድሎች ጋር እንያያዛለን",
+    forSeekers: "ለስራ ፈላጊዎች",
+    seekerSteps: [
+      {
+        title: "ዕድሎችን ይመልከቱ",
+        desc: "ስራዎችን በቃላት ይፈልጉ ወይም በምድብ፣ ቦታ፣ ወይም በልምድ ደረጃ ያጣሩ"
+      },
+      {
+        title: "የስራ ዝርዝሮችን ይመልከቱ",
+        desc: "ሙሉ መግለጫ፣ መስፈርቶች፣ እና የኩባንያ መረጃ ለማየት ማንኛውንም ስራ ይጫኑ"
+      },
+      {
+        title: "ቀጥሎ ይህን ይመልከቱ",
+        desc: "ለመስበክ የተሰጠውን የእውቂያ መረጃ በመጠቀም ከሰራተኞች ጋር ይገናኙ"
+      }
+    ],
+    forEmployers: "ለሰራተኞች",
+    employerSteps: [
+      {
+        title: "የስራ ማስታወቂያ ይላኩ",
+        desc: "ወደ እኛ የእውቂያ ገጽ ሂዱ እና የስራ ማስታወቂያ ቅጽ ለመድረስ ይጫኑ"
+      },
+      {
+        title: "ቅጽን ይሙሉ",
+        desc: "ስለ ቦታው ሁሉንም ዝርዝሮች፣ መስፈርቶች፣ እና የእውቂያ መረጃ ይሙሉ"
+      },
+      {
+        title: "እንደገና ማረጋገጥ እና ማስታወቅ",
+        desc: "ቅጽዎን እንመልከታለን እና በ24 ሰዓታት ውስጥ እንለጋለን"
+      }
+    ],
+    postJob: "ስራ ይላኩ",
+    latestJobs: "የቅርብ ጊዜ የስራ እድሎች",
+    latestJobsDesc: "የቅርብ ጊዜ የስራ ማስታወቂያችንን ይመልከቱ",
+    loading: "የቅርብ ጊዜ ስራዎችን በመጫን ላይ...",
+    noJobs: "በአሁኑ ጊዜ ምንም ስራ የለም። እባክዎን እንደገና ይመልከቱ",
+    viewAll: "ሁሉንም ስራዎች ይመልከቱ",
+    loginToView: "ሁሉንም ስራዎች ለማየት ይግቡ"
   }
-];
+};
 
-
-const JOB_CATEGORIES = [
-  'Architecture & Construction', 'Construction', 'Engineering', 'Accounting',
-  'Finance', 'Customer Service', 'Professional Services', 'Design', 'Marketing',
-  'Information Technology', 'Telecommunications', 'Community Service',
-  'Science & Technology', 'Business & Administration', 'Media & Journalism',
-  'Advertising and Media', 'Sales', 'Management', 'Admin, Secretarial & Clerical',
-  'Legal', 'Restaurant & Food Service', 'Purchasing & Procurement',
-  'Business Development', 'QA-Quality Control', 'Inventory & Stock', 'Insurance',
-  'Economics', 'Social Science & Community', 'Communications, PR & Journalism',
-  'Environment & Natural Resource', 'Hospitality-Hotel', 'Supply Chain',
-  'Warehouse', 'Natural Science', 'Retail and Trade', 'Nurse',
-  'Logistics, Transport & Supply Chain', 'Human Resources',
-  'Development & Project Management', 'Training', 'Installation & Repair',
-  'Education', 'Health Care', 'Agriculture and Food', 'General Business',
-  'Research', 'Consultancy & Training', 'Travel & Tourism', 'Manufacturing',
-  'Maintenance', 'Distribution-Shipping'
-];
-
-const CATEGORY_MAP = JOB_CATEGORIES.reduce((map, name, index) => {
-  map[name] = index + 1;
-  return map;
-}, {});
-
-const Jobs = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { currentUser } = useAuth();
-
+function Jobs({ lang = 'en' }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedJobId, setSelectedJobId] = useState(null);
-  const [contactJob, setContactJob] = useState(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [newJobAdded, setNewJobAdded] = useState(false);
-  const [filters, setFilters] = useState({
-    search: '',
-    category: '',
-    ordering: '-posted_on'
-  });
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    arrows: false,
-    fade: true
-  };
-
-  const loadJobs = useCallback(async () => {
-    try {
-      setLoading(true);
-      const apiFilters = {
-        search: filters.search.trim(),
-        job_category: CATEGORY_MAP[filters.category] || '',
-        ordering: filters.ordering
-      };
-      Object.keys(apiFilters).forEach(key => {
-        if (!apiFilters[key]) delete apiFilters[key];
-      });
-
-      const { results } = await fetchJobs(apiFilters);
-      setJobs(results || []);
-      setError(null);
-      setNewJobAdded(false);
-
-      const searchParams = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value && key !== 'ordering') searchParams.set(key, value);
-      });
-      searchParams.set('ordering', filters.ordering);
-      navigate(`?${searchParams.toString()}`, { replace: true });
-    } catch (err) {
-      setError(err.message || 'Failed to load jobs');
-      setJobs([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [filters, navigate]);
-
-  const handleNewJob = async (jobData) => {
-    try {
-      const newJob = await postJob(jobData);
-      setJobs(prev => [newJob, ...prev]);
-      setNewJobAdded(true);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  };
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const initialFilters = {
-      search: searchParams.get('search') || '',
-      category: searchParams.get('category') || '',
-      ordering: searchParams.get('ordering') || '-posted_on'
+    const loadJobs = async () => {
+      try {
+        const response = await fetchJobs({ ordering: '-posted_on' });
+        const data = Array.isArray(response) ? response : response.results || [];
+        // Get only the 3 most recent jobs for the home page
+        setJobs(data.slice(0, 3));
+      } catch (err) {
+        setError(err.message || 'Failed to load jobs. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
-    setFilters(initialFilters);
-  }, [location.search]);
+    loadJobs();
+  }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => loadJobs(), 300);
-    return () => clearTimeout(timer);
-  }, [loadJobs]);
-
-  const handleFilterChange = (name, value) => {
-    setFilters(prev => ({ ...prev, [name]: value }));
+  const handleViewAll = () => {
+    if (currentUser) {
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
   };
-
-  const handleSearch = (term) => {
-    handleFilterChange('search', term);
-  };
-
-  const clearAllFilters = () => {
-    setFilters({ search: '', category: '', ordering: '-posted_on' });
-  };
-
-  const activeFiltersCount = Object.entries(filters).filter(
-    ([key, value]) => value && !(key === 'ordering' && value === '-posted_on')
-  ).length;
 
   return (
-    <div className="jobs-page">
-      {/* Hero Slider */}
-      <div className="hero-slider">
-        <Slider {...sliderSettings}>
-          {SLIDER_IMAGES.map((slide) => (
-            <div key={slide.id} className="slider-item">
-              <div className="slider-image" style={{ backgroundImage: `url(${slide.url})` }}>
-                <div className="slider-overlay"></div>
-                <div className="slider-content">
-                  <h1>{slide.title}</h1>
-                  <p>{slide.subtitle}</p>
-                  <div className="slider-buttons">
-                    <Link to="/contact" className="slider-button primary">Contact to Post a Job</Link>
-                    <Link to="/jobs" className="slider-button secondary">See listed jobs</Link>
+    <div className="home-page">
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="hero-title">{texts[lang].heroTitle}</h1>
+            <p className="hero-subtitle">
+              {texts[lang].heroSubtitle}
+            </p>
+            
+            <button 
+              onClick={handleViewAll} 
+              className="hero-cta"
+            >
+              {texts[lang].browseAll} <FaArrowRight />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="how-it-works">
+        <div className="section-header">
+          <h2 className="section-title">{texts[lang].howItWorks}</h2>
+          <p className="section-description">{texts[lang].howItWorksDesc}</p>
+        </div>
+
+        <div className="workflow">
+          {/* For Job Seekers */}
+          <div className="workflow-card seeker-flow">
+            <div className="flow-header">
+              <FaUserTie className="flow-icon" />
+              <h3>{texts[lang].forSeekers}</h3>
+            </div>
+            <div className="flow-steps">
+              {texts[lang].seekerSteps.map((step, index) => (
+                <div className="step" key={index}>
+                  <div className="step-number">{index + 1}</div>
+                  <div className="step-content">
+                    <h4>{step.title}</h4>
+                    <p>{step.desc}</p>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
-
-      {/* Page Header */}
-      <div className="page-header">
-        <h1>Available Jobs</h1>
-        
-      </div>
-
-      {/* Main Layout */}
-      <div className="jobs-layout">
-        <div className="categories-sidebar">
-          <h3>Job Categories</h3>
-          <div className="categories-list">
-            <button onClick={() => handleFilterChange('category', '')} className={!filters.category ? 'active-category' : ''}>
-              All Categories
-            </button>
-            {JOB_CATEGORIES.map(category => (
-              <button
-                key={category}
-                onClick={() => handleFilterChange('category', category)}
-                className={filters.category === category ? 'active-category' : ''}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="jobs-main-content">
-          <div className="filters-section">
-            <SearchBar onSearch={handleSearch} initialValue={filters.search} />
-            <div className="filters-row">
-              <select value={filters.ordering} onChange={(e) => handleFilterChange('ordering', e.target.value)}>
-                <option value="-posted_on">Newest First</option>
-                <option value="posted_on">Oldest First</option>
-              </select>
-            </div>
-
-            {activeFiltersCount > 0 && (
-              <div className="active-filters">
-                <span>{activeFiltersCount} active filter{activeFiltersCount > 1 ? 's' : ''}</span>
-                <button onClick={clearAllFilters}>Clear All</button>
-              </div>
-            )}
-          </div>
-
-          {loading ? (
-            <LoadingSpinner />
-          ) : error ? (
-            <div className="error-message">
-              <p>{error}</p>
-              <button onClick={loadJobs}>Retry</button>
-            </div>
-          ) : jobs.length > 0 ? (
-            <div className="jobs-grid">
-              {jobs.map(job => (
-                <JobCard
-                  key={job.id}
-                  job={job}
-                  onViewDetails={() => {
-                    setSelectedJobId(job.id);
-                    setShowDetailModal(true);
-                  }}
-                  onContact={() => {
-                    setContactJob(job);
-                    setShowContactModal(true);
-                  }}
-                />
               ))}
             </div>
-          ) : (
-            <div className="no-jobs">
-              <p>No jobs found matching your criteria</p>
-              <button onClick={clearAllFilters}>Reset Filters</button>
-            </div>
-          )}
-        </div>
-      </div>
+            <button 
+              onClick={handleViewAll} 
+              className="flow-cta"
+            >
+              {texts[lang].browseAll} <FaArrowRight />
+            </button>
+          </div>
 
-      {/* Modals */}
-      {showDetailModal && (
-        <JobDetailModal jobId={selectedJobId} onClose={() => setShowDetailModal(false)} />
-      )}
-      {showContactModal && (
-        <ContactModal job={contactJob} onClose={() => setShowContactModal(false)} />
-      )}
+          {/* For Employers */}
+          <div className="workflow-card employer-flow">
+            <div className="flow-header">
+              <FaBriefcase className="flow-icon" />
+              <h3>{texts[lang].forEmployers}</h3>
+            </div>
+            <div className="flow-steps">
+              {texts[lang].employerSteps.map((step, index) => (
+                <div className="step" key={index}>
+                  <div className="step-number">{index + 1}</div>
+                  <div className="step-content">
+                    <h4>{step.title}</h4>
+                    <p>{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button 
+              onClick={() => navigate('/contact')} 
+              className="flow-cta"
+            >
+              {texts[lang].postJob} <FaArrowRight />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Jobs Preview Section */}
+      <section className="latest-jobs">
+        <div className="section-header">
+          <h2 className="section-title">{texts[lang].latestJobs}</h2>
+          <p className="section-description">{texts[lang].latestJobsDesc}</p>
+        </div>
+
+        {loading ? (
+          <div className="loading-container">
+            <LoadingSpinner />
+            <p>{texts[lang].loading}</p>
+          </div>
+        ) : error ? (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        ) : (
+          <>
+            <div className="jobs-grid">
+              {jobs.length > 0 ? (
+                jobs.map((job) => (
+                  <JobCard 
+                    key={job.id} 
+                    job={job} 
+                    showButtons={false}
+                    onClick={() => navigate(`/jobs/${job.id}`)}
+                  />
+                ))
+              ) : (
+                <p className="no-jobs-message">
+                  {texts[lang].noJobs}
+                </p>
+              )}
+            </div>
+
+            <div className="view-all">
+              <button 
+                onClick={handleViewAll} 
+                className="view-all-btn"
+                aria-label={currentUser ? texts[lang].viewAll : texts[lang].loginToView}
+              >
+                {currentUser ? texts[lang].viewAll : texts[lang].loginToView}
+                <FaExternalLinkAlt className="link-icon" />
+              </button>
+            </div>
+          </>
+        )}
+      </section>
     </div>
   );
-};
+}
 
 export default Jobs;
+
+

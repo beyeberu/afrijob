@@ -1,0 +1,22 @@
+{% extends "admin/change_list.html" %}
+{% load admin_list %}
+
+{% block result_list %}
+    {% if cl.result_count %}
+        <table id="result_list">
+            <thead>{% result_headers cl %}</thead>
+            <tbody>
+            {% for result in cl.result_list %}
+                {% if forloop.first and not result.approved %}
+                    <tr><td colspan="100%" style="background:#ffe;border-bottom:2px solid #ccc;font-weight:bold;text-align:center;">Unapproved Jobs</td></tr>
+                {% elif not result.approved and forloop.last %}
+                    <tr><td colspan="100%" style="background:#efe;border-bottom:2px solid #ccc;font-weight:bold;text-align:center;">--- Approved Jobs ---</td></tr>
+                {% elif forloop.first and result.approved %}
+                    <tr><td colspan="100%" style="background:#efe;border-bottom:2px solid #ccc;font-weight:bold;text-align:center;">Approved Jobs</td></tr>
+                {% endif %}
+                {% result_row result %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

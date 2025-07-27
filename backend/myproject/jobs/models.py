@@ -72,9 +72,6 @@ class UserProfile(models.Model):
 # --------------------------
 # Job Category Model
 # --------------------------
-# --------------------------
-# Job Category Model
-# --------------------------
 class JobCategory(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -95,6 +92,16 @@ class EmploymentType(models.Model):
 
 
 # --------------------------
+# Location Model
+# --------------------------
+class Location(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+# --------------------------
 # Job Model
 # --------------------------
 class Job(models.Model):
@@ -109,15 +116,15 @@ class Job(models.Model):
     job_title = models.CharField(max_length=200)
     company_name = models.CharField(max_length=200)
     company_logo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
-    location = models.CharField(max_length=200)
+    location = models.CharField(max_length=255)  # <-- changed from ForeignKey to CharField
 
     # Job Details
     job_description = models.TextField()
     responsibilities = models.TextField()
-    qualifications = models.TextField(blank=True)
+    qualifications = models.TextField()
     skills = models.TextField(blank=True)
     salary_and_benefits = models.TextField(blank=True)
-    how_to_apply = models.TextField(blank=True)
+    how_to_apply = models.TextField()
     encourage_applicants = models.TextField(blank=True)
 
     # Salary and Type
@@ -131,14 +138,19 @@ class Job(models.Model):
     email = models.EmailField()
     website = models.URLField(blank=True)
 
-
     # Relationships
     job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
-    posted_by = models.ForeignKey(FirebaseUser, on_delete=models.SET_NULL, null=True, blank=True)
+    posted_by = models.ForeignKey(
+        'FirebaseUser',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='jobs_posted'
+    )
 
     # Dates
-    posted_on = models.DateField(null=True, blank=True)
-    expired_date = models.DateField(null=True, blank=True)
+    posted_on = models.DateField(null=True)
+    expired_date = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -157,3 +169,18 @@ class Job(models.Model):
         if today <= self.expired_date:
             return 'active'
         return 'expired'
+
+
+# --------------------------
+# Advertisement Model
+# --------------------------
+class Advertisement(models.Model):
+    title = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='ads/', blank=True, null=True)
+    link = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title or "Ad"

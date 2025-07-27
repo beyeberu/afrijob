@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   auth,
   signInWithEmailAndPassword,
@@ -13,6 +13,7 @@ import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
+  const [emailHistory, setEmailHistory] = useState([]);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
@@ -20,6 +21,12 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Load email history from localStorage
+    const history = JSON.parse(localStorage.getItem("emailHistory") || "[]");
+    setEmailHistory(history);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -34,6 +41,15 @@ function Login() {
       );
       const token = await userCredential.user.getIdToken();
       localStorage.setItem("token", token);
+
+      // Save email to history if not already present
+      let history = JSON.parse(localStorage.getItem("emailHistory") || "[]");
+      if (email && !history.includes(email)) {
+        history.push(email);
+        localStorage.setItem("emailHistory", JSON.stringify(history));
+        setEmailHistory(history);
+      }
+
       navigate("/");
     } catch (err) {
       setError(getErrorMessage(err.code));
@@ -99,7 +115,13 @@ function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          list="email-history"
         />
+        <datalist id="email-history">
+          {emailHistory.map((item, idx) => (
+            <option value={item} key={idx} />
+          ))}
+        </datalist>
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Password"

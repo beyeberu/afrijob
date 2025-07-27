@@ -1,6 +1,2 @@
-backend/myproject/jobs/firebase-adminsdk.json
-backend/myproject/firebase-adminsdk.json
-backend/myproject/jobs/firebase-adminsdk.json
-backend/myproject/firebase-adminsdk.json
-backend/myproject/jobs/firebase-adminsdk.json
-backend/myproject/firebase-adminsdk.json
+# Ignore Firebase credentials
+backend/myproject/afrijob-a8080-firebase-adminsdk-fbsvc-a0369da3f7.json

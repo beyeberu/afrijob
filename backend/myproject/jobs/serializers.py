@@ -1,5 +1,5 @@
-from rest_framework import serializers
-from .models import Job, EmploymentType, JobCategory, FirebaseUser
+from rest_framework import serializers, generics, permissions
+from .models import Job, EmploymentType, JobCategory, FirebaseUser, Location, Advertisement
 
 
 class DashboardJobSerializer(serializers.ModelSerializer):
@@ -42,10 +42,17 @@ class FirebaseUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'first_name', 'last_name']
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['id', 'name']
+
+
 class JobSerializer(serializers.ModelSerializer):
     employment_type = EmploymentTypeSerializer(allow_null=True)
     job_category = JobCategorySerializer(allow_null=True)
     posted_by = FirebaseUserSerializer(read_only=True)
+    location = serializers.CharField()  # <-- FIXED HERE
     status = serializers.SerializerMethodField()
     company_logo_url = serializers.SerializerMethodField()
 
@@ -96,7 +103,29 @@ class JobSerializer(serializers.ModelSerializer):
         return None
 
 
-class UserSerializer(serializers.ModelSerializer):  # Added UserSerializer
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = FirebaseUser
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined']
+
+
+class AdvertisementSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Advertisement
+        fields = ['id', 'title', 'description', 'image_url', 'link']
+
+    def get_image_url(self, obj):
+        request = self.context.get('request', None)
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        elif obj.image:
+            return obj.image.url  # Return relative URL if no request
+        return None
+
+
+class LocationListCreateView(generics.ListCreateAPIView):
+    queryset = Location.objects.all().order_by('name')
+    serializer_class = LocationSerializer
+    permission_classes = [permissions.AllowAny]

@@ -14,6 +14,9 @@ const JobCard = ({ job, onViewDetails, onContact, showButtons = true }) => {
     }
   };
 
+  // Check if job is expired
+  const isExpired = job.expired_date && new Date(job.expired_date) < new Date();
+
   return (
     <div className="job-card" data-testid="job-card">
       <div className="job-header" style={{ position: "relative" }}>
@@ -38,9 +41,9 @@ const JobCard = ({ job, onViewDetails, onContact, showButtons = true }) => {
           />
         )}
         <h3 style={{ marginLeft: job.company_logo_url ? "50px" : 0 }}>
-          {job.job_title || 'Untitled Position'}
+          Title:  {job.job_title || 'Untitled Position'}
         </h3>
-        <p className="company">{job.company_name || 'Company not specified'}</p>
+        <p className="company">Company: {job.company_name || 'Company not specified'}</p>
         <span className={`status ${job.status || 'unknown'}`}>
           {job.status || 'Unknown status'}
         </span>
@@ -60,6 +63,13 @@ const JobCard = ({ job, onViewDetails, onContact, showButtons = true }) => {
             {job.max_salary ? ` - $${job.max_salary}` : ''}
           </p>
         )}
+        {isExpired && (
+          <div className="expired-label" style={{ color: '', marginTop: '0.5rem', fontWeight: 600 }}>
+            Expired date: {job.expired_date 
+              ? new Date(job.expired_date).toLocaleDateString()
+              : 'Date not available'}
+          </div>
+        )}
       </div>
 
       {showButtons && (
@@ -71,13 +81,15 @@ const JobCard = ({ job, onViewDetails, onContact, showButtons = true }) => {
           >
             View Details
           </button>
-          <button 
-            onClick={handleContact} 
-            className="contact-btn"
-            aria-label={`Contact about ${job.job_title}`}
-          >
-            Contact
-          </button>
+          {job.status && job.status.toLowerCase() === 'active' && (
+            <button 
+              onClick={handleContact} 
+              className="contact-btn"
+              aria-label={`Contact about ${job.job_title}`}
+            >
+              Contact
+            </button>
+          )}
         </div>
       )}
     </div>

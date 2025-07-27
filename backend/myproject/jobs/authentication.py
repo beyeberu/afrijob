@@ -6,29 +6,32 @@ import firebase_admin
 
 User = get_user_model()
 
-# Initialize Firebase app if not already initialized
+# ✅ Move Firebase initialization here to guarantee it's ready when needed
 if not firebase_admin._apps:
-    cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS)
-    firebase_admin.initialize_app(cred)
+    try:
+        cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS)
+        firebase_admin.initialize_app(cred)
+    except Exception as e:
+        raise exceptions.AuthenticationFailed(f"Firebase init failed: {str(e)}")
+
 
 class FirebaseAuthentication(authentication.BaseAuthentication):
     """
     Custom authentication class for Firebase.
     Validates Firebase ID tokens and retrieves or creates a user.
     """
+
     def authenticate(self, request):
         auth_header = request.META.get('HTTP_AUTHORIZATION')
         if not auth_header or not auth_header.startswith('Bearer '):
-            return None  # No authentication header provided
+            return None  # No token provided
 
         id_token = auth_header.split('Bearer ')[1]
-        
+
         try:
-            # Verify the Firebase ID token
             decoded_token = auth.verify_id_token(id_token)
             uid = decoded_token['uid']
 
-            # Retrieve or create the user based on the Firebase UID
             user, created = User.objects.update_or_create(
                 firebase_uid=uid,
                 defaults={
@@ -39,13 +42,12 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
                 }
             )
 
-            # Ensure password remains unusable for Firebase users
             if user.password:
                 user.set_unusable_password()
                 user.save()
 
             return (user, None)
-        
+
         except auth.InvalidIdTokenError:
             raise exceptions.AuthenticationFailed('Invalid Firebase ID token.')
         except auth.ExpiredIdTokenError:
